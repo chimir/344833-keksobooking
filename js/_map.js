@@ -38,20 +38,34 @@ var ADS_FEATURES = [
   'conditioner'
 ];
 
+var adsTypeTranslate = {
+  'flat': 'квартира',
+  'house': 'дом',
+  'bungalo': 'бунгало'
+};
+
 var adsQuantity = 8; // Кол-во объявлений.
 
 // Рандомное число.
-// Возвращает случайное целое число между min (включительно) и max (не включая max).
-var getRandom = function (min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
+// Возвращает случайное целое число от 0 до max (не включая max).
+var getRandom = function (max) {
+  return Math.floor(Math.random() * max);
 };
 
-// Создание массива не поаторяющихся чисел от min (включительно) и max (не включая max).
+// Рандомное число.
+// Возвращает случайное целое число между min (включительно) и max (включительно).
+var randomInteger = function (min, max) {
+  var rand = min + Math.random() * (max + 1 - min);
+  rand = Math.floor(rand);
+  return rand;
+};
+
+// Создание массива не повторяющихся чисел от min (включительно) до max (включительно).
 var getRandomArray = function (min, max) {
   var arr = [];
 
-  while (arr.length < max - min) {
-    var randomNumber = getRandom(min, max);
+  while (arr.length <= max - min) {
+    var randomNumber = randomInteger(min, max);
 
     if (arr.indexOf(randomNumber) === -1) {
       arr.push(randomNumber);
@@ -64,26 +78,12 @@ var getRandomArray = function (min, max) {
 var avatarIdMin = 1;
 var avatarIdMax = 8;
 
-var priseQuantityMin = 1000;
-var priseQuantityMax = 1000000;
-
-var roomsQuantityMin = 1;
-var roomsQuantityMax = 5;
-
-var guestsQuantityMin = 1;
-var guestsQuantityMax = 10;
-
-var xQuantityMin = 300;
-var xQuantityMax = 900;
-
-var yQuantityMin = 100;
-var yQuantityMax = 500;
-
-var randomAvatarIndex = getRandomArray(avatarIdMin, avatarIdMax + 1);
+var randomAvatarIndex = getRandomArray(avatarIdMin, avatarIdMax);
 var randomTitleIndex = getRandomArray(0, ADS_TITLE.length);
+console.log(randomTitleIndex);
 
 // Данные для заполнения объявления.
-var addAdsOptions = function (number) {
+var adsOptions = function (number) {
   return {
     'author': {
       'avatar': 'img/avatars/user0' + (randomAvatarIndex[number]) + '.png' // не должны повторяться.
@@ -91,19 +91,19 @@ var addAdsOptions = function (number) {
     'offer': {
       'title': ADS_TITLE[randomTitleIndex[number]], // не должны повторяться.
       'address': '',
-      'price': getRandom(priseQuantityMin, priseQuantityMax + 1),
-      'type': ADS_TYPE[getRandom(0, ADS_TYPE.length)],
-      'rooms': getRandom(roomsQuantityMin, roomsQuantityMax + 1),
-      'guests': getRandom(guestsQuantityMin, guestsQuantityMax + 1),
-      'checkin': ADS_CHECKIN[getRandom(0, ADS_CHECKIN.length)],
-      'checkout': ADS_CHECKOUT[getRandom(0, ADS_CHECKOUT.length)],
+      'price': randomInteger(1000, 1000000),
+      'type': ADS_TYPE[getRandom(ADS_TYPE.length)],
+      'rooms': randomInteger(1, 5),
+      'guests': randomInteger(1, 10),
+      'checkin': ADS_CHECKIN[getRandom(ADS_CHECKIN.length)],
+      'checkout': ADS_CHECKOUT[getRandom(ADS_CHECKOUT.length)],
       'features': '',
       'description': '',
       'photos': ''
     },
     'location': {
-      'x': getRandom(xQuantityMin, xQuantityMax + 1),
-      'y': getRandom(yQuantityMin, yQuantityMax + 1)
+      'x': randomInteger(300, 900),
+      'y': randomInteger(100, 500)
     }
   };
 };
@@ -117,7 +117,7 @@ var createArray = function (length, data) {
   return array;
 };
 
-var similarAds = createArray(adsQuantity, addAdsOptions); // Массив c данными для заполнения объявлений.
+var similarAds = createArray(adsQuantity, adsOptions); // Массив c данными для заполнения объявлений.
 
 var similarLodgeTemplate = document.querySelector('#lodge-template').content;
 var similarPin = document.querySelector('.tokyo__pin-map');
@@ -125,7 +125,7 @@ var similarDialog = document.querySelector('.dialog');
 var similarDialogPanel = document.querySelector('.dialog__panel');
 
 // Создание меток и заполнение данными (аватар пользователя и координаты меток).
-var frag = document.createDocumentFragment();
+var fr = document.createDocumentFragment();
 var pinWidth = 56;
 var pinHeight = 75;
 
@@ -138,16 +138,19 @@ for (var i = 0; i < similarAds.length; i++) {
   newPin.style = 'left: ' + x + 'px; top: ' + y + 'px';
   newPin.innerHTML = '<img src="' + similarAds[i].author.avatar + '" class="rounded" width="40" height="40">';
 
-  frag.appendChild(newPin);
+  fr.appendChild(newPin);
 }
-similarPin.appendChild(frag);
+similarPin.appendChild(fr);
 
-var randomFeaturesIndex = getRandomArray(0, ADS_FEATURES.length);
+// var count = random(0, adsQuantity); // Случайное число в зависимости от кол-ва объявлений.
+
 // Массив строк случайной длины доступнх удобств.
 var adsFeatures = [];
-for (i = 0; i < getRandom(1, ADS_FEATURES.length + 1); i++) {
-  adsFeatures.push(ADS_FEATURES[randomFeaturesIndex[i]]);
+for (i = 0; i < randomInteger(1, ADS_FEATURES.length); i++) {
+  adsFeatures.push(ADS_FEATURES[i]);
 }
+
+console.log(adsFeatures);
 
 // Список доступных удобств.
 var fragment = document.createDocumentFragment();
@@ -159,14 +162,8 @@ for (i = 0; i < adsFeatures.length; i++) {
 }
 
 // Заполняем карточку.
-var fillLodge = function (data) {
+var lodge = function (data) {
   var adsElement = similarLodgeTemplate.cloneNode(true);
-
-  var adsTypeTranslate = {
-    'flat': 'квартира',
-    'house': 'дом',
-    'bungalo': 'бунгало'
-  };
 
   adsElement.querySelector('.lodge__title').textContent = data.offer.title;
   adsElement.querySelector('.lodge__address').textContent = data.location.x + ', ' + data.location.y;
@@ -182,4 +179,4 @@ var fillLodge = function (data) {
 };
 
 similarDialog.removeChild(similarDialogPanel); // Удаляем карточку по умолчанию.
-similarDialog.appendChild(fillLodge(similarAds[0])); // Вставляем первую карточку из массива.
+similarDialog.appendChild(lodge(similarAds[0])); // Вставляем карточку.
