@@ -193,6 +193,7 @@ similarDialog.appendChild(fillLodge(similarAds[0])); // Вставляем пе�
  * =====================
  */
 var noticeForm = document.querySelector('.notice__form');
+var addressField = noticeForm.querySelector('#address');
 var titleField = noticeForm.querySelector('#title');
 var priceField = noticeForm.querySelector('#price');
 var typeField = noticeForm.querySelector('#type');
@@ -284,6 +285,28 @@ noticeForm.addEventListener('input', function () {
   } else if (priceField.value >= price[2]) {
     typeField.value = 'palace';
   }
+});
+
+// Выделяем красной рамкой неправильно заполненные поля.
+var highlightFieldError = function (field) {
+  if (!field.validity.valid) {
+    field.setAttribute('style', 'border-color: red;');
+  }
+};
+
+// Выделяем красной рамкой неправильно заполненные поля - Адрес
+addressField.addEventListener('invalid', function () {
+  highlightFieldError(addressField);
+});
+
+// Выделяем красной рамкой неправильно заполненные поля - Заголовок объявления
+titleField.addEventListener('invalid', function () {
+  highlightFieldError(titleField);
+});
+
+// Выделяем красной рамкой неправильно заполненные поля - Цена
+priceField.addEventListener('invalid', function () {
+  highlightFieldError(priceField);
 });
 
 // Валидация поля - Заголовок.
