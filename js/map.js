@@ -268,30 +268,21 @@ noticeForm.addEventListener('change', function (evt) {
   }
 });
 
+// Изменение  плейсхолдера поля цены, в зависимости от типа жилья.
 var price = [
   1000,
+  0,
   5000,
   10000
 ];
+for (i = 0; i < 4; i++) {
+  typeField.options[i].value = price[i];
+}
 
-var type = [
-  'bungalo',
-  'flat',
-  'house',
-  'palace'
-];
+priceField.placeholder = typeField.value; // значение по умолчанию.
 
-// Изменение  плейсхолдера поля цены, в зависимости от типа жилья.
-typeField.addEventListener('input', function () {
-  if (typeField.value === type[0]) {
-    priceField.placeholder = 0;
-  } else if (typeField.value === type[1]) {
-    priceField.placeholder = price[0];
-  } else if (typeField.value === type[2]) {
-    priceField.placeholder = price[1];
-  } else if (typeField.value === type[3]) {
-    priceField.placeholder = price[2];
-  }
+typeField.addEventListener('change', function () {
+  priceField.placeholder = typeField.value;
 });
 
 // Выделяем красной рамкой неправильно заполненные поля.
