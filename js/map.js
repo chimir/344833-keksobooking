@@ -268,14 +268,21 @@ noticeForm.addEventListener('change', function (evt) {
   }
 });
 
-// Тип жилья в зависимости от цены.
-noticeForm.addEventListener('input', function () {
-  var price = [
-    '1000',
-    '5000',
-    '10000'
-  ];
+var price = [
+  '1000',
+  '5000',
+  '10000'
+];
 
+var type = [
+  'bungalo',
+  'flat',
+  'house',
+  'palace'
+];
+
+// Тип жилья в зависимости от цены.
+priceField.addEventListener('input', function () {
   if (priceField.value < price[0]) {
     typeField.value = 'bungalo';
   } else if (priceField.value < price[1]) {
@@ -284,6 +291,19 @@ noticeForm.addEventListener('input', function () {
     typeField.value = 'house';
   } else if (priceField.value >= price[2]) {
     typeField.value = 'palace';
+  }
+});
+
+// Изменение  плейсхолдера поля цены, в зависимости от типа жилья.
+typeField.addEventListener('input', function () {
+  if (typeField.value === type[0]) {
+    priceField.placeholder = 0;
+  } else if (typeField.value === type[1]) {
+    priceField.placeholder = price[0];
+  } else if (typeField.value === type[2]) {
+    priceField.placeholder = price[1];
+  } else if (typeField.value === type[3]) {
+    priceField.placeholder = price[2];
   }
 });
 
