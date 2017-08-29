@@ -269,9 +269,9 @@ noticeForm.addEventListener('change', function (evt) {
 });
 
 var price = [
-  '1000',
-  '5000',
-  '10000'
+  1000,
+  5000,
+  10000
 ];
 
 var type = [
