@@ -117,12 +117,13 @@
     <form class="notice__form"
           method="post"
           enctype="multipart/form-data"
+          action="https://1510.dump.academy/keksobooking"
           autocomplete="off">
       <div class="form__content">
         <div class="form__panel">
           <div class="form__element  form__element--wide">
             <label for="title">Заголовок объявления</label>
-            <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка, например">
+            <input id="title" name="title" type="text" minlength="30" maxlength="100" placeholder="Милая, уютная квартирка, например" required>
           </div>
           <div class="form__row">
             <div class="form__element">
@@ -136,7 +137,7 @@
             </div>
             <div class="form__element">
               <label for="price">Цена за ночь, руб.</label>
-              <input id="price" name="price" type="number" placeholder="5000">
+              <input id="price" name="price" type="number" value="1000" min="0" max="1000000" placeholder="5000" required>
             </div>
           </div>
           <div class="form__row">
@@ -167,7 +168,7 @@
         <div class="form__panel">
           <div class="form__element  form__element--wide">
             <label for="address">Адрес</label>
-            <input id="address" name="address" type="text">
+            <input id="address" name="address" type="text" required>
           </div>
           <div class="form__row">
             <div class="form__element">
