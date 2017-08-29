@@ -281,19 +281,6 @@ var type = [
   'palace'
 ];
 
-// Тип жилья в зависимости от цены.
-priceField.addEventListener('input', function () {
-  if (priceField.value < price[0]) {
-    typeField.value = type[0];
-  } else if (priceField.value < price[1]) {
-    typeField.value = type[1];
-  } else if (priceField.value < price[2]) {
-    typeField.value = type[2];
-  } else if (priceField.value >= price[2]) {
-    typeField.value = type[3];
-  }
-});
-
 // Изменение  плейсхолдера поля цены, в зависимости от типа жилья.
 typeField.addEventListener('input', function () {
   if (typeField.value === type[0]) {
