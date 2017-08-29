@@ -268,21 +268,18 @@ noticeForm.addEventListener('change', function (evt) {
   }
 });
 
+// Мин. цена для типа жилья.
+var priceOfType = {
+  'bungalo': 0,
+  'flat': 1000,
+  'house': 5000,
+  'palace': 10000
+};
+
 // Изменение  плейсхолдера поля цены, в зависимости от типа жилья.
-var price = [
-  1000,
-  0,
-  5000,
-  10000
-];
-for (i = 0; i < 4; i++) {
-  typeField.options[i].value = price[i];
-}
-
-priceField.placeholder = typeField.value; // значение по умолчанию.
-
+priceField.placeholder = priceOfType[typeField.value]; // значение по умолчанию.
 typeField.addEventListener('change', function () {
-  priceField.placeholder = typeField.value;
+  priceField.placeholder = priceOfType[typeField.value];
 });
 
 // Выделяем красной рамкой неправильно заполненные поля.
