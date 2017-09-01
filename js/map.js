@@ -136,7 +136,6 @@ var similarAds = createArray(adsQuantity, addAdsOptions); // Массив c да
 var similarLodgeTemplate = document.querySelector('#lodge-template').content;
 var similarPin = document.querySelector('.tokyo__pin-map');
 var similarDialog = document.querySelector('.dialog');
-var similarDialogPanel = document.querySelector('.dialog__panel');
 
 // Создание меток и заполнение данными (аватар пользователя и координаты меток).
 var frag = document.createDocumentFragment();
@@ -228,6 +227,8 @@ var activatePin = function (evt) {
 similarPin.addEventListener('click', function (evt) {
   activatePin(evt);
   similarDialog.classList.remove('hidden');
+
+  replaceDialog(evt);
 });
 
 // Делаем метку активной и
@@ -236,6 +237,8 @@ similarPin.addEventListener('keydown', function (evt) {
   if (evt.keyCode === KEYDOWN.ENTER) {
     activatePin(evt);
     similarDialog.classList.remove('hidden');
+
+    replaceDialog(evt);
   }
 });
 
@@ -254,25 +257,24 @@ document.addEventListener('keydown', function (evt) {
   }
 });
 
-/**
- * Не получпется так сделать, т.к nodeList[i].className не видит добавляемый класс pin--active
- *
- * NodeList
- * var pins = similarPin.querySelectorAll('.pin:not(.pin__main)');
- *
- * function findInArray(nodeList, value) {
- *  for (i = 0; i < nodeList.length; i++) {
- *    if (nodeList[i].className === value) {
- *      return i;
- *    }
- *  }
- *  return 0;
- * }
- *
- * var index = findInArray(pins, 'pin pin--active');
- *
- * similarDialog.appendChild(fillLodge(similarAds[index]))
- */
+// Замена диалогового окна на другое, с индексом
+// равным индексу нажатой метки.
+var replaceDialog = function (evt) {
+  var target = evt.target;
+  var targetSrc = 0;
 
-similarDialog.removeChild(similarDialogPanel); // Удаляем карточку по умолчанию.
-similarDialog.appendChild(fillLodge(similarAds[0])); // Вставляем первую карточку из массива.
+  if (target.nodeName === 'IMG') {
+    targetSrc = evt.target.getAttribute('src');
+  } else {
+    targetSrc = evt.target.firstChild.getAttribute('src');
+  }
+
+  for (i = 0; i < similarAds.length; i++) {
+    if (similarAds[i].author.avatar === targetSrc) {
+      var index = i;
+    }
+  }
+
+  var similarDialogPanel = similarDialog.querySelector('.dialog__panel');
+  similarDialog.replaceChild(fillLodge(similarAds[index]), similarDialogPanel);
+};
