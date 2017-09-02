@@ -47,6 +47,11 @@ var ADS_FEATURES = [
   'conditioner'
 ];
 
+var KEYDOWN = {
+  ENTER: 13,
+  ESC: 27
+};
+
 var adsQuantity = 8; // Кол-во объявлений.
 
 // Рандомное число.
@@ -131,7 +136,6 @@ var similarAds = createArray(adsQuantity, addAdsOptions); // Массив c да
 var similarLodgeTemplate = document.querySelector('#lodge-template').content;
 var similarPin = document.querySelector('.tokyo__pin-map');
 var similarDialog = document.querySelector('.dialog');
-var similarDialogPanel = document.querySelector('.dialog__panel');
 
 // Создание меток и заполнение данными (аватар пользователя и координаты меток).
 var frag = document.createDocumentFragment();
@@ -145,6 +149,7 @@ for (var i = 0; i < similarAds.length; i++) {
   var newPin = document.createElement('div');
   newPin.className = 'pin';
   newPin.style = 'left: ' + x + 'px; top: ' + y + 'px';
+  newPin.tabIndex = 0;
   newPin.innerHTML = '<img src="' + similarAds[i].author.avatar + '" class="rounded" width="40" height="40">';
 
   frag.appendChild(newPin);
@@ -184,8 +189,94 @@ var fillLodge = function (data) {
   return adsElement;
 };
 
-similarDialog.removeChild(similarDialogPanel); // Удаляем карточку по умолчанию.
-similarDialog.appendChild(fillLodge(similarAds[0])); // Вставляем первую карточку из массива.
+/**
+ * ================
+ * #11 подробности
+ * ================
+ */
+var pin = similarPin.querySelector('.pin');
+var dialogClose = similarDialog.querySelector('.dialog__close');
+
+similarDialog.classList.add('hidden'); // Скрываем диологовое окно по умолчанию.
+
+
+// Добавляем класс нажатой метке, и удаляем этого класс у активной метки.
+var highlightPin = function (node) {
+  if (pin) {
+    pin.classList.remove('pin--active');
+  }
+  pin = node;
+  pin.classList.add('pin--active');
+};
+
+// Активируем нажатую метку, включая нажатие на потомке.
+var activatePin = function (evt) {
+  var target = evt.target;
+
+  while (target !== similarPin) {
+    if (target.className === 'pin') {
+      highlightPin(target);
+    }
+    target = target.parentNode;
+  }
+};
+
+// Делаем метку активной при клике по ней и
+// окрываем диалоговое окно.
+similarPin.addEventListener('click', function (evt) {
+  activatePin(evt);
+  similarDialog.classList.remove('hidden');
+
+  replaceDialog(evt);
+});
+
+// Делаем метку активной и
+// окрываем диалоговое окно при нажатии Enter.
+similarPin.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === KEYDOWN.ENTER) {
+    activatePin(evt);
+    similarDialog.classList.remove('hidden');
+
+    replaceDialog(evt);
+  }
+});
+
+// Скрываем диологовое окно при клике на кнопку закрытия (крестик) .dialog__close.
+// Удаляем класс pin--active у активной метки.
+dialogClose.addEventListener('click', function () {
+  similarDialog.classList.add('hidden');
+  pin.classList.remove('pin--active');
+});
+
+// Закрытие диалогового окна при нажатии Ssc.
+document.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === KEYDOWN.ESC) {
+    similarDialog.classList.add('hidden');
+    pin.classList.remove('pin--active');
+  }
+});
+
+// Замена диалогового окна на другое, с индексом
+// равным индексу нажатой метки.
+var replaceDialog = function (evt) {
+  var target = evt.target;
+  var targetSrc = 0;
+
+  if (target.nodeName === 'IMG') {
+    targetSrc = evt.target.getAttribute('src');
+  } else {
+    targetSrc = evt.target.firstChild.getAttribute('src');
+  }
+
+  for (i = 0; i < similarAds.length; i++) {
+    if (similarAds[i].author.avatar === targetSrc) {
+      var index = i;
+    }
+  }
+
+  var similarDialogPanel = similarDialog.querySelector('.dialog__panel');
+  similarDialog.replaceChild(fillLodge(similarAds[index]), similarDialogPanel);
+};
 
 /**
  * =====================
