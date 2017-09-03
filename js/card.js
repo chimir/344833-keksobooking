@@ -25,10 +25,9 @@
     // равным индексу нажатой метки.
     replaceDialog: function (evt) {
       var target = evt.target;
-      var targetSrc = 0;
 
       if (target.nodeName === 'IMG') {
-        targetSrc = evt.target.getAttribute('src');
+        var targetSrc = evt.target.getAttribute('src');
       } else {
         targetSrc = evt.target.firstChild.getAttribute('src');
       }
