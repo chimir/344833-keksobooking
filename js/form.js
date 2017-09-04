@@ -1,11 +1,5 @@
 'use strict';
 (function () {
-
-  /**
-   * =====================
-   * доверяй, но проверяй
-   * =====================
-   */
   var noticeForm = document.querySelector('.notice__form');
   var addressField = noticeForm.querySelector('#address');
   var titleField = noticeForm.querySelector('#title');
@@ -16,29 +10,35 @@
   var roomNumberField = noticeForm.querySelector('#room_number');
   var capacityField = noticeForm.querySelector('#capacity');
 
+  // Функция создает массив из значений выпадающего списка.
+  var getSelectOptionsArr = function (selectFieldName) {
+    var array = [];
+
+    for (var i = 0; i < selectFieldName.length; i++) {
+      array.push(selectFieldName.options[i].value);
+    }
+
+    return array;
+  };
+
+  var syncPlaceholder = function (element, value) {
+    element.placeholder = value;
+  };
+
+  var syncValues = function (element, value) {
+    element.value = value;
+  };
+
+  var roomNumber = getSelectOptionsArr(roomNumberField);
+  var capacity = getSelectOptionsArr(capacityField);
+
   /**
-   *
    * Количество гостей в зависимости от кол-ва комнат.
    *
    * @param {*} fieldParent - поле с которым производим действие.
    * @param {*} fieldUnder - зависимое поле, в котором меняется значение.
-   *
    */
   var relationFields = function (fieldParent, fieldUnder) {
-    var roomNumber = [
-      '1',
-      '2',
-      '3',
-      '100'
-    ];
-
-    var capacity = [
-      '3',
-      '2',
-      '1',
-      '0'
-    ];
-
     for (var i = fieldUnder.options.length - 1; i >= 0; i--) {
       var option = fieldUnder.options[i];
 
@@ -64,37 +64,30 @@
     }
   };
 
-  relationFields(roomNumberField, capacityField); // задаем значения по умолчанию.
-
   // Количество гостей в зависимости от кол-ва комнат.
+  relationFields(roomNumberField, capacityField); // задаем значения по умолчанию.
   roomNumberField.addEventListener('change', function () {
     relationFields(roomNumberField, capacityField);
   });
 
-  // Заезд/выезд.
-  noticeForm.addEventListener('change', function (evt) {
-    var target = evt.target;
-
-    if (target === timeInField) {
-      timeOutField.value = timeInField.value;
-    } else {
-      timeInField.value = timeOutField.value;
-    }
-  });
-
   // Мин. цена для типа жилья.
-  var priceOfType = {
-    'bungalo': 0,
-    'flat': 1000,
-    'house': 5000,
-    'palace': 10000
-  };
+  var price = [
+    1000,
+    0,
+    5000,
+    10000
+  ];
+
+  // Время выезда в зависимости от значения поля - "время заезда"
+  window.synchronizeFields(timeInField, timeOutField, getSelectOptionsArr(timeInField), getSelectOptionsArr(timeOutField), syncValues);
+
+  // Время заезда в зависимости от значения поля - "время выезда"
+  window.synchronizeFields(timeOutField, timeInField, getSelectOptionsArr(timeOutField), getSelectOptionsArr(timeInField), syncValues);
 
   // Изменение  плейсхолдера поля цены, в зависимости от типа жилья.
-  priceField.placeholder = priceOfType[typeField.value]; // значение по умолчанию.
-  typeField.addEventListener('change', function () {
-    priceField.placeholder = priceOfType[typeField.value];
-  });
+  priceField.placeholder = price[0]; // значения по умолчанию.
+  window.synchronizeFields(typeField, priceField, getSelectOptionsArr(typeField), price, syncPlaceholder);
+
 
   // Выделяем красной рамкой неправильно заполненные поля.
   var highlightFieldError = function (field) {
