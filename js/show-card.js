@@ -2,9 +2,8 @@
 (function () {
   var similarDialog = document.querySelector('.dialog');
 
-  // Замена диалогового окна на другое, с индексом
-  // равным индексу нажатой метки.
-  window.showCard = function (evt) {
+  // Индекс нажатой метки.
+  window.getPinIndex = function (evt) {
     var target = evt.target;
 
     if (target.nodeName === 'IMG') {
@@ -19,7 +18,15 @@
       }
     }
 
+    return index;
+  };
+
+  // Замена диалогового окна на другое, с индексом
+  // равным индексу нажатой метки.
+  window.showCard = function (evt) {
     var similarDialogPanel = similarDialog.querySelector('.dialog__panel');
+    var index = window.getPinIndex(evt);
+
     similarDialog.replaceChild(window.card.fillLodge(window.data.similarAds[index]), similarDialogPanel);
   };
 })();
