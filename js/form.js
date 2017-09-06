@@ -138,4 +138,12 @@
     }
   });
 
+  // Отправка формы.
+  noticeForm.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(noticeForm), function () {
+      noticeForm.reset();
+      addressField.value = getPinGadPosition(pinMain.offsetLeft, pinMain.offsetTop);
+    }, window.util.errorHandler);
+    evt.preventDefault();
+  });
 })();
