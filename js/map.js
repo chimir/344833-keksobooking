@@ -12,7 +12,7 @@
       window.pin.activatePin(evt);
       similarDialog.classList.remove('hidden');
 
-      window.showCard(evt);
+      // window.showCard(evt);
     }
   };
 

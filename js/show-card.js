@@ -23,10 +23,20 @@
 
   // Замена диалогового окна на другое, с индексом
   // равным индексу нажатой метки.
+  /*
   window.showCard = function (evt) {
     var similarDialogPanel = similarDialog.querySelector('.dialog__panel');
     var index = window.getPinIndex(evt);
 
     similarDialog.replaceChild(window.card.fillLodge(window.data.similarAds[index]), similarDialogPanel);
+  };*/
+
+  var successHandler = function (cards) {
+    var similarDialogPanel = similarDialog.querySelector('.dialog__panel');
+    // var index = window.getPinIndex(evt);
+
+    similarDialog.replaceChild(window.card.fillLodge(cards[0]), similarDialogPanel);
   };
+
+  window.backend.load(successHandler, window.util.errorHandler);
 })();
