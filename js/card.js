@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var similarLodgeTemplate = document.querySelector('#lodge-template').content;
+  var similarDialog = document.querySelector('.dialog');
 
   // Список доступных удобств.
   var getFeatures = function (arr) {
@@ -31,6 +32,21 @@
       document.querySelector('.dialog__title img').src = data.author.avatar;
 
       return adsElement;
+    },
+
+    openDialog: function (evt) {
+      // Проверяем, что клик был не по метке с классом pin__main.
+      if (!evt.target.classList.contains('pin__main') && !evt.target.parentNode.classList.contains('pin__main')) {
+        window.pin.activatePin(evt);
+        similarDialog.classList.remove('hidden');
+        window.showCard(evt);
+      }
+    },
+
+    closeDialog: function () {
+      var pin = document.querySelector('.pin--active');
+      similarDialog.classList.add('hidden');
+      pin.classList.remove('pin--active');
     }
   };
 })();

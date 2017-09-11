@@ -19,9 +19,11 @@
     return newPin;
   };
 
+  var pins = [];
   // Создание меток и заполнение данными (аватар пользователя и координаты меток).
-  var successHandler = function (pins) {
+  var successHandler = function (data) {
     var fragment = document.createDocumentFragment();
+    pins = data;
 
     for (var i = 0; i < pins.length; i++) {
       fragment.appendChild(getPin(pins[i]));
@@ -29,7 +31,6 @@
 
     similarPin.appendChild(fragment);
   };
-
   window.backend.load(successHandler, window.util.errorHandler);
 
   // Добавляем класс нажатой метке, и удаляем этого класс у активной метки.
@@ -52,6 +53,25 @@
         }
         target = target.parentNode;
       }
+    },
+
+    // Индекс нажатой метки.
+    getPinIndex: function (evt) {
+      var target = evt.target;
+
+      if (target.nodeName === 'IMG') {
+        var targetSrc = evt.target.getAttribute('src');
+      } else {
+        targetSrc = evt.target.firstChild.getAttribute('src');
+      }
+
+      for (var i = 0; i < pins.length; i++) {
+        if (pins[i].author.avatar === targetSrc) {
+          var index = i;
+        }
+      }
+
+      return pins[index]; // Объекст объявления с индексом нажатой метки.
     }
   };
 })();

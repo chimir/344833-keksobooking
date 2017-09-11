@@ -2,19 +2,6 @@
 (function () {
   var URL = 'https://1510.dump.academy/keksobooking';
 
-  /*
-    var xhr = new XMLHttpRequest();
-
-    xhr.responseType = 'json';
-    xhr.timeout = 5000;
-
-    xhr.addEventListener('load', function () {
-      console.log(xhr.response);
-    });
-    xhr.open('GET', 'https://1510.dump.academy/keksobooking/data');
-    xhr.send();
-  */
-
   var setup = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
 
