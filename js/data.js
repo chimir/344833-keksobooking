@@ -38,15 +38,6 @@
     '14:00'
   ];
 
-  var ADS_FEATURES = [
-    'wifi',
-    'dishwasher',
-    'parking',
-    'washer',
-    'elevator',
-    'conditioner'
-  ];
-
   var adsQuantity = 8; // Кол-во объявлений.
 
   var avatarIdMin = 1;
@@ -105,24 +96,8 @@
     return array;
   };
 
-  var randomFeaturesIndex = window.util.getRandomArray(0, ADS_FEATURES.length);
-  // Массив строк случайной длины доступнх удобств.
-  var adsFeatures = [];
-  for (var i = 0; i < window.util.getRandom(1, ADS_FEATURES.length + 1); i++) {
-    adsFeatures.push(ADS_FEATURES[randomFeaturesIndex[i]]);
-  }
-
-  // Список доступных удобств.
-  var fragment = document.createDocumentFragment();
-  for (i = 0; i < adsFeatures.length; i++) {
-    var newElement = document.createElement('span');
-    newElement.className = 'feature__image feature__image--' + adsFeatures[i];
-
-    fragment.appendChild(newElement);
-  }
-
   window.data = {
-    similarAds: createArray(adsQuantity, addAdsOptions), // Массив c данными для заполнения объявлений.
-    fragment: fragment
+    similarAds: createArray(adsQuantity, addAdsOptions) // Массив c данными для заполнения объявлений.
+    // fragment: getFeatures(adsFeatures)
   };
 })();

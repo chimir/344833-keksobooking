@@ -6,43 +6,28 @@
 
   similarDialog.classList.add('hidden'); // Скрываем диологовое окно по умолчанию.
 
-  var openDialog = function (evt) {
-    // Проверяем, что клик был не по метке с классом pin__main.
-    if (!evt.target.classList.contains('pin__main') && !evt.target.parentNode.classList.contains('pin__main')) {
-      window.pin.activatePin(evt);
-      similarDialog.classList.remove('hidden');
-
-      window.showCard(evt);
-    }
-  };
-
-  var closeDialog = function () {
-    var pin = similarPin.querySelector('.pin--active');
-    similarDialog.classList.add('hidden');
-    pin.classList.remove('pin--active');
-  };
-
   // Делаем метку активной при клике по ней и
   // окрываем диалоговое окно.
   similarPin.addEventListener('click', function (evt) {
-    openDialog(evt);
+    window.card.openDialog(evt);
   });
 
   // Делаем метку, находящуюся в фокусе, активной и
   // окрываем диалоговое окно при нажатии Enter.
   similarPin.addEventListener('keydown', function (evt) {
-    window.util.isEnterEvent(evt, openDialog);
+    window.util.isEnterEvent(evt, window.card.openDialog);
   });
 
   // Скрываем диологовое окно при клике на кнопку закрытия (крестик) .dialog__close.
   // Удаляем класс pin--active у активной метки.
-  dialogClose.addEventListener('click', function () {
-    closeDialog();
+  dialogClose.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    window.card.closeDialog();
   });
 
   // Закрытие диалогового окна при нажатии Ssc.
   document.addEventListener('keydown', function (evt) {
-    window.util.isEscEvent(evt, closeDialog);
+    window.util.isEscEvent(evt, window.card.closeDialog);
   });
 
   /**

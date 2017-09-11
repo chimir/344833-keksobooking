@@ -138,4 +138,15 @@
     }
   });
 
+  // Отправка формы.
+  noticeForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+
+    window.backend.save(new FormData(noticeForm), function () {
+      noticeForm.reset();
+      titleField.removeAttribute('style');
+      priceField.removeAttribute('style');
+      addressField.removeAttribute('style');
+    }, window.util.errorHandler);
+  });
 })();
