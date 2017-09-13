@@ -18,18 +18,125 @@
 
     return newPin;
   };
+  var formFilter = document.querySelector('.tokyo__filters');
+
+  var typeFilterValue; // Тип жилья.
+  var priceFilterValue; // Цена.
+  var roomNumberValue; // Кол-во комнат.
+  var guestsNumberValue; // Кол-во гостей.
+  var featureValue; // Удобства.
 
   var pins = [];
-  // Создание меток и заполнение данными (аватар пользователя и координаты меток).
-  var successHandler = function (data) {
-    var fragment = document.createDocumentFragment();
-    pins = data;
 
-    for (var i = 0; i < pins.length; i++) {
-      fragment.appendChild(getPin(pins[i]));
+  var updatePins = function () {
+    var sameTypePins = pins.filter(function (it) { // Ok
+      return it.offer.type === typeFilterValue;
+    });
+    var samePricePins = pins.filter(function (it) {
+      // console.log(getPrice(it.offer.price));
+    });
+    var sameRoomPins = pins.filter(function (it) { // Ok
+      return it.offer.rooms === roomNumberValue;
+    });
+    var sameGuestsPins = pins.filter(function (it) { // Ok
+      return it.offer.guests === guestsNumberValue;
+    });
+    var sameFeaturePins = pins.filter(function (it) {
+      return it.offer.features.some(getFeature);
+      // console.log(it.offer.features.indexOf(featureValue));
+    });
+
+    render(sameTypePins);
+  };
+
+  // Тип жилья.
+  var typeFilter = formFilter.querySelector('#housing_type');
+  typeFilter.addEventListener('change', function () {
+    typeFilterValue = typeFilter.value;
+    updatePins();
+  });
+
+  // Цена.
+  var priceFilter = formFilter.querySelector('#housing_price');
+  priceFilter.addEventListener('change', function () {
+    priceFilterValue = priceFilter.value;
+    updatePins();
+    /*
+    * any    - Любая
+    * middle - 10000 - 50000₽
+    * low    - до 10000₽
+    * high   - от 50000₽
+    *
+    */
+  });
+
+  var getPrice = function (price) {
+    if (priceFilterValue === 'middle') {
+      return (price >= 10000) && (price < 50000);
+    } else if (priceFilterValue === 'low') {
+      return price < 10000;
+    } else if (priceFilterValue === 'high') {
+      return price >= 50000;
+    } else {
+      return true;
     }
+  };
 
-    similarPin.appendChild(fragment);
+
+  // Кол-во комнат.
+  var roomNumberFilter = formFilter.querySelector('#housing_room-number');
+  roomNumberFilter.addEventListener('change', function () {
+    roomNumberValue = parseInt(roomNumberFilter.value, 10);
+    updatePins();
+    /*
+    * any - Любое число комнат
+    * 1
+    * 2
+    * 3
+    */
+  });
+
+  // Кол-во гостей.
+  var guestsNumberFilter = formFilter.querySelector('#housing_guests-number');
+  guestsNumberFilter.addEventListener('change', function () {
+    guestsNumberValue = parseInt(guestsNumberFilter.value, 10);
+    updatePins();
+    /*
+    * any - Любое число гостей
+    * 1
+    * 2
+    */
+  });
+
+  // Удобства.
+  var featureFilter = formFilter.querySelector('#housing_features input');
+  featureFilter.addEventListener('change', function () {
+    featureValue = featureFilter.checked ? featureFilter.value : '';
+    updatePins();
+  });
+
+  var getFeature = function (it) {
+    return it === featureValue;
+  };
+
+  var feat = formFilter.querySelectorAll('#housing_features input');
+  // console.log(feat[0].checked);
+
+  // Создание меток и заполнение данными (аватар пользователя и координаты меток).
+  var render = function (data) {
+    var pinMain = similarPin.querySelector('.pin__main');
+
+    similarPin.innerHTML = '';
+    similarPin.appendChild(pinMain);
+
+    for (var i = 0; i < data.length; i++) {
+      similarPin.appendChild(getPin(data[i]));
+    }
+  };
+
+  var successHandler = function (data) {
+    pins = data;
+    updatePins();
   };
   window.backend.load(successHandler, window.util.errorHandler);
 
