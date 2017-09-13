@@ -44,7 +44,7 @@
 
   // Координаты острия метки.
   var getPinGadPosition = function (x, y) {
-    var pinGadPositionX = x + pinWidth / 2;
+    var pinGadPositionX = Math.round(x + pinWidth / 2);
     var pinGadPositionY = y + pinHeight;
 
     return 'x: ' + pinGadPositionX + ', y: ' + pinGadPositionY;
