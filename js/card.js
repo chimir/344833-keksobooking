@@ -12,10 +12,25 @@
   var getFeatures = function (arr) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < arr.length; i++) {
-      var newElement = document.createElement('span');
-      newElement.className = 'feature__image feature__image--' + arr[i];
+      var feature = document.createElement('span');
+      feature.className = 'feature__image feature__image--' + arr[i];
 
-      fragment.appendChild(newElement);
+      fragment.appendChild(feature);
+    }
+
+    return fragment;
+  };
+
+  // Фотографии.
+  var getPhotos = function (arr) {
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < arr.length; i++) {
+      var photo = document.createElement('img');
+      photo.src = arr[i];
+      photo.width = 52;
+      photo.height = 42;
+
+      fragment.appendChild(photo);
     }
 
     return fragment;
@@ -33,6 +48,7 @@
       adsElement.querySelector('.lodge__rooms-and-guests').textContent = 'Для ' + data.offer.guests + ' гостей в ' + data.offer.rooms + ' комнатах';
       adsElement.querySelector('.lodge__checkin-time').textContent = 'Заезд после ' + data.offer.checkin + ' , выезд до ' + data.offer.checkout;
       adsElement.querySelector('.lodge__features').appendChild(getFeatures(data.offer.features));
+      adsElement.querySelector('.lodge__photos').appendChild(getPhotos(data.offer.photos));
       adsElement.querySelector('.lodge__description').textContent = data.offer.description;
       document.querySelector('.dialog__title img').src = data.author.avatar;
 
