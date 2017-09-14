@@ -83,7 +83,18 @@
     }
   };
 
-  formFilter.addEventListener('change', updatePins);
+  var debounceTimeout = 500;
+  var debounce = function () {
+    var lastTimeout;
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(function () {
+      updatePins();
+    }, debounceTimeout);
+  };
+
+  formFilter.addEventListener('change', debounce);
 
   // Создание меток и заполнение данными (аватар пользователя и координаты меток).
   var render = function (data) {
