@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var DEBOUNCE_TIME = 500;
+
   var similarPin = document.querySelector('.tokyo__pin-map');
   var pin = similarPin.querySelector('.pin');
 
@@ -83,7 +85,6 @@
     }
   };
 
-  var debounceTimeout = 500;
   var debounce = function () {
     var lastTimeout;
     if (lastTimeout) {
@@ -91,7 +92,7 @@
     }
     lastTimeout = window.setTimeout(function () {
       updatePins();
-    }, debounceTimeout);
+    }, DEBOUNCE_TIME);
   };
 
   formFilter.addEventListener('change', debounce);
