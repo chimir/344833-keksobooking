@@ -18,109 +18,72 @@
 
     return newPin;
   };
-  var formFilter = document.querySelector('.tokyo__filters');
 
-  var typeFilterValue; // Тип жилья.
-  var priceFilterValue; // Цена.
-  var roomNumberValue; // Кол-во комнат.
-  var guestsNumberValue; // Кол-во гостей.
-  var featureValue; // Удобства.
+  var formFilter = document.querySelector('.tokyo__filters');
 
   var pins = [];
 
   var updatePins = function () {
-    var sameTypePins = pins.filter(function (it) { // Ok
-      return it.offer.type === typeFilterValue;
-    });
-    var samePricePins = pins.filter(function (it) {
-      // console.log(getPrice(it.offer.price));
-    });
-    var sameRoomPins = pins.filter(function (it) { // Ok
-      return it.offer.rooms === roomNumberValue;
-    });
-    var sameGuestsPins = pins.filter(function (it) { // Ok
-      return it.offer.guests === guestsNumberValue;
-    });
-    var sameFeaturePins = pins.filter(function (it) {
-      return it.offer.features.some(getFeature);
-      // console.log(it.offer.features.indexOf(featureValue));
+    var filteredPins = pins;
+
+    var typeFilterValue = formFilter.querySelector('#housing_type').value; // Тип жилья.
+    var priceFilterValue = formFilter.querySelector('#housing_price').value; // Цена.
+    var roomNumberValue = formFilter.querySelector('#housing_room-number').value; // Кол-во комнат.
+    var guestsNumberValue = formFilter.querySelector('#housing_guests-number').value; // Кол-во гостей.
+    var selectedFeatures = formFilter.querySelectorAll('input[type="checkbox"]:checked'); // Удобства
+
+    if (typeFilterValue !== 'any') {
+      filteredPins = filteredPins.filter(function (it) {
+        return it.offer.type === typeFilterValue;
+      });
+    }
+
+    filteredPins = filteredPins.filter(function (it) {
+      return checkPrice(it.offer.price, priceFilterValue);
     });
 
-    render(sameTypePins);
+    if (roomNumberValue !== 'any') {
+      filteredPins = filteredPins.filter(function (it) {
+        return it.offer.rooms === parseInt(roomNumberValue, 10);
+      });
+    }
+    if (guestsNumberValue !== 'any') {
+      filteredPins = filteredPins.filter(function (it) {
+        return it.offer.guests === parseInt(guestsNumberValue, 10);
+      });
+    }
+
+    if (selectedFeatures.length > 0) {
+      [].forEach.call(selectedFeatures, function (item) {
+        filteredPins = filteredPins.filter(function (it) {
+          var isChecked = false;
+
+          if (it.offer.features.indexOf(item.value) > -1) {
+            isChecked = true;
+          }
+
+          return isChecked;
+        });
+      });
+    }
+
+    render(filteredPins);
   };
 
-  // Тип жилья.
-  var typeFilter = formFilter.querySelector('#housing_type');
-  typeFilter.addEventListener('change', function () {
-    typeFilterValue = typeFilter.value;
-    updatePins();
-  });
-
-  // Цена.
-  var priceFilter = formFilter.querySelector('#housing_price');
-  priceFilter.addEventListener('change', function () {
-    priceFilterValue = priceFilter.value;
-    updatePins();
-    /*
-    * any    - Любая
-    * middle - 10000 - 50000₽
-    * low    - до 10000₽
-    * high   - от 50000₽
-    *
-    */
-  });
-
-  var getPrice = function (price) {
-    if (priceFilterValue === 'middle') {
-      return (price >= 10000) && (price < 50000);
-    } else if (priceFilterValue === 'low') {
-      return price < 10000;
-    } else if (priceFilterValue === 'high') {
-      return price >= 50000;
-    } else {
-      return true;
+  var checkPrice = function (price, selected) {
+    switch (selected) {
+      case 'low':
+        return price < 10000;
+      case 'middle':
+        return (price >= 10000) && (price < 50000);
+      case 'high':
+        return price >= 50000;
+      default:
+        return true;
     }
   };
 
-
-  // Кол-во комнат.
-  var roomNumberFilter = formFilter.querySelector('#housing_room-number');
-  roomNumberFilter.addEventListener('change', function () {
-    roomNumberValue = parseInt(roomNumberFilter.value, 10);
-    updatePins();
-    /*
-    * any - Любое число комнат
-    * 1
-    * 2
-    * 3
-    */
-  });
-
-  // Кол-во гостей.
-  var guestsNumberFilter = formFilter.querySelector('#housing_guests-number');
-  guestsNumberFilter.addEventListener('change', function () {
-    guestsNumberValue = parseInt(guestsNumberFilter.value, 10);
-    updatePins();
-    /*
-    * any - Любое число гостей
-    * 1
-    * 2
-    */
-  });
-
-  // Удобства.
-  var featureFilter = formFilter.querySelector('#housing_features input');
-  featureFilter.addEventListener('change', function () {
-    featureValue = featureFilter.checked ? featureFilter.value : '';
-    updatePins();
-  });
-
-  var getFeature = function (it) {
-    return it === featureValue;
-  };
-
-  var feat = formFilter.querySelectorAll('#housing_features input');
-  // console.log(feat[0].checked);
+  formFilter.addEventListener('change', updatePins);
 
   // Создание меток и заполнение данными (аватар пользователя и координаты меток).
   var render = function (data) {
@@ -134,10 +97,16 @@
     }
   };
 
+  var getInitialArray = function (data) {
+    return data.slice(0, 3);
+  };
+
   var successHandler = function (data) {
     pins = data;
-    updatePins();
+
+    render(getInitialArray(pins));
   };
+
   window.backend.load(successHandler, window.util.errorHandler);
 
   // Добавляем класс нажатой метке, и удаляем этого класс у активной метки.
