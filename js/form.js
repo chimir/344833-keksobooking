@@ -1,5 +1,13 @@
 'use strict';
 (function () {
+  // Мин. цена для типа жилья.
+  var PRICE = [
+    1000,
+    0,
+    5000,
+    10000
+  ];
+
   var noticeForm = document.querySelector('.notice__form');
   var addressField = noticeForm.querySelector('#address');
   var titleField = noticeForm.querySelector('#title');
@@ -70,14 +78,6 @@
     bindFields(roomNumberField, capacityField);
   });
 
-  // Мин. цена для типа жилья.
-  var price = [
-    1000,
-    0,
-    5000,
-    10000
-  ];
-
   // Время выезда в зависимости от значения поля - "время заезда"
   window.synchronizeFields(timeInField, timeOutField, getSelectOptionsArr(timeInField), getSelectOptionsArr(timeOutField), syncValues);
 
@@ -85,8 +85,8 @@
   window.synchronizeFields(timeOutField, timeInField, getSelectOptionsArr(timeOutField), getSelectOptionsArr(timeInField), syncValues);
 
   // Изменение  плейсхолдера поля цены, в зависимости от типа жилья.
-  priceField.placeholder = price[0]; // значения по умолчанию.
-  window.synchronizeFields(typeField, priceField, getSelectOptionsArr(typeField), price, syncPlaceholder);
+  priceField.placeholder = PRICE[0]; // значения по умолчанию.
+  window.synchronizeFields(typeField, priceField, getSelectOptionsArr(typeField), PRICE, syncPlaceholder);
 
 
   // Выделяем красной рамкой неправильно заполненные поля.

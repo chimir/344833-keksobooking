@@ -123,7 +123,7 @@
 
   // Добавляем класс нажатой метке, и удаляем этого класс у активной метки.
   var highlightPin = function (node) {
-    if (pin) {
+    if (pin !== null) {
       pin.classList.remove('pin--active');
     }
     pin = node;
@@ -153,13 +153,12 @@
         targetSrc = evt.target.firstChild.getAttribute('src');
       }
 
-      for (var i = 0; i < pins.length; i++) {
-        if (pins[i].author.avatar === targetSrc) {
-          var index = i;
-        }
+      var i = 0;
+      while (pins[i].author.avatar !== targetSrc) {
+        i++;
       }
 
-      return pins[index]; // Объекст объявления с индексом нажатой метки.
+      return pins[i]; // Объекст объявления с индексом нажатой метки.
     }
   };
 })();
