@@ -38,7 +38,7 @@
    * @param {*} fieldParent - поле с которым производим действие.
    * @param {*} fieldUnder - зависимое поле, в котором меняется значение.
    */
-  var relationFields = function (fieldParent, fieldUnder) {
+  var getRelationFields = function (fieldParent, fieldUnder) {
     for (var i = fieldUnder.options.length - 1; i >= 0; i--) {
       var option = fieldUnder.options[i];
 
@@ -65,9 +65,9 @@
   };
 
   // Количество гостей в зависимости от кол-ва комнат.
-  relationFields(roomNumberField, capacityField); // задаем значения по умолчанию.
+  getRelationFields(roomNumberField, capacityField); // задаем значения по умолчанию.
   roomNumberField.addEventListener('change', function () {
-    relationFields(roomNumberField, capacityField);
+    getRelationFields(roomNumberField, capacityField);
   });
 
   // Мин. цена для типа жилья.
