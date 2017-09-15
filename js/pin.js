@@ -16,7 +16,14 @@
     newPin.className = 'pin';
     newPin.style = 'left: ' + x + 'px; top: ' + y + 'px';
     newPin.tabIndex = 0;
-    newPin.innerHTML = '<img src="' + data.author.avatar + '" class="rounded" width="40" height="40">';
+
+    var newPinAvatar = document.createElement('img');
+    newPinAvatar.src = data.author.avatar;
+    newPinAvatar.className = 'rounded';
+    newPinAvatar.width = 40;
+    newPinAvatar.height = 40;
+
+    newPin.appendChild(newPinAvatar);
 
     return newPin;
   };
