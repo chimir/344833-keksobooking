@@ -111,9 +111,9 @@
     similarPin.innerHTML = '';
     similarPin.appendChild(pinMain);
 
-    for (var i = 0; i < data.length; i++) {
-      similarPin.appendChild(getPin(data[i]));
-    }
+    data.forEach(function (dataObject) {
+      similarPin.appendChild(getPin(dataObject));
+    });
   };
 
   var getInitialArray = function (data) {

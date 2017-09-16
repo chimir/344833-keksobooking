@@ -11,12 +11,13 @@
   // Список доступных удобств.
   var getFeatures = function (arr) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < arr.length; i++) {
+
+    arr.forEach(function (featureClass) {
       var feature = document.createElement('span');
-      feature.className = 'feature__image feature__image--' + arr[i];
+      feature.className = 'feature__image feature__image--' + featureClass;
 
       fragment.appendChild(feature);
-    }
+    });
 
     return fragment;
   };
@@ -24,14 +25,15 @@
   // Фотографии.
   var getPhotos = function (arr) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < arr.length; i++) {
+
+    arr.forEach(function (src) {
       var photo = document.createElement('img');
-      photo.src = arr[i];
+      photo.src = src;
       photo.width = 52;
       photo.height = 42;
 
       fragment.appendChild(photo);
-    }
+    });
 
     return fragment;
   };
