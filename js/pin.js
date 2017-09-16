@@ -32,6 +32,7 @@
 
   var pins = [];
 
+  var filterResult;
   var updatePins = function () {
     var filteredPins = pins;
 
@@ -76,6 +77,7 @@
       });
     }
 
+    filterResult = filteredPins;
     render(filteredPins);
   };
 
@@ -166,7 +168,8 @@
         i++;
       }
 
-      return pins[i]; // Объекст объявления с индексом нажатой метки.
+      var ads = typeof filterResult === 'undefined' ? getInitialArray(pins) : filterResult;
+      return ads[i]; // Объекст объявления с индексом нажатой метки.
     }
   };
 })();
