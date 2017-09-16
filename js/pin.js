@@ -152,16 +152,17 @@
 
     // Индекс нажатой метки.
     getPinIndex: function (evt) {
+      var pinsAll = document.querySelectorAll('.pin:not(.pin__main)');
       var target = evt.target;
 
       if (target.nodeName === 'IMG') {
-        var targetSrc = evt.target.getAttribute('src');
+        var targetElement = target.parentNode;
       } else {
-        targetSrc = evt.target.firstChild.getAttribute('src');
+        targetElement = target;
       }
 
       var i = 0;
-      while (pins[i].author.avatar !== targetSrc) {
+      while (pinsAll[i] !== targetElement) {
         i++;
       }
 
