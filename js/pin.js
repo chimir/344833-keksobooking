@@ -32,14 +32,19 @@
 
   var pins = [];
 
+  var typeFilter = formFilter.querySelector('#housing_type'); // Тип жилья.
+  var priceFilter = formFilter.querySelector('#housing_price'); // Цена.
+  var roomNumber = formFilter.querySelector('#housing_room-number'); // Кол-во комнат.
+  var guestsNumber = formFilter.querySelector('#housing_guests-number'); // Кол-во гостей.
+
   var filterResult;
   var updatePins = function () {
     var filteredPins = pins;
 
-    var typeFilterValue = formFilter.querySelector('#housing_type').value; // Тип жилья.
-    var priceFilterValue = formFilter.querySelector('#housing_price').value; // Цена.
-    var roomNumberValue = formFilter.querySelector('#housing_room-number').value; // Кол-во комнат.
-    var guestsNumberValue = formFilter.querySelector('#housing_guests-number').value; // Кол-во гостей.
+    var typeFilterValue = typeFilter.value; // Тип жилья.
+    var priceFilterValue = priceFilter.value; // Цена.
+    var roomNumberValue = roomNumber.value; // Кол-во комнат.
+    var guestsNumberValue = guestsNumber.value; // Кол-во гостей.
     var selectedFeatures = formFilter.querySelectorAll('input[type="checkbox"]:checked'); // Удобства
 
     if (typeFilterValue !== 'any') {
