@@ -33,14 +33,14 @@
   var pins = [];
 
   var filterResult;
+
+  var typeFilterValue = formFilter.querySelector('#housing_type').value; // Тип жилья.
+  var priceFilterValue = formFilter.querySelector('#housing_price').value; // Цена.
+  var roomNumberValue = formFilter.querySelector('#housing_room-number').value; // Кол-во комнат.
+  var guestsNumberValue = formFilter.querySelector('#housing_guests-number').value; // Кол-во гостей.
+  var selectedFeatures = formFilter.querySelectorAll('input[type="checkbox"]:checked'); // Удобства
   var updatePins = function () {
     var filteredPins = pins;
-
-    var typeFilterValue = formFilter.querySelector('#housing_type').value; // Тип жилья.
-    var priceFilterValue = formFilter.querySelector('#housing_price').value; // Цена.
-    var roomNumberValue = formFilter.querySelector('#housing_room-number').value; // Кол-во комнат.
-    var guestsNumberValue = formFilter.querySelector('#housing_guests-number').value; // Кол-во гостей.
-    var selectedFeatures = formFilter.querySelectorAll('input[type="checkbox"]:checked'); // Удобства
 
     if (typeFilterValue !== 'any') {
       filteredPins = filteredPins.filter(function (it) {
@@ -147,6 +147,7 @@
       while (target !== similarPin) {
         if (target.className === 'pin') {
           highlightPin(target);
+          break;
         }
         target = target.parentNode;
       }
