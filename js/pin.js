@@ -37,6 +37,13 @@
   var roomNumber = formFilter.querySelector('#housing_room-number'); // Кол-во комнат.
   var guestsNumber = formFilter.querySelector('#housing_guests-number'); // Кол-во гостей.
 
+  var getSelectValue = function (filterValue, data) {
+    if (filterValue !== 'any') {
+      return String(data) === filterValue;
+    }
+    return true;
+  };
+
   var filterResult;
   var updatePins = function () {
     var filteredPins = pins;
@@ -47,26 +54,12 @@
     var guestsNumberValue = guestsNumber.value; // Кол-во гостей.
     var selectedFeatures = formFilter.querySelectorAll('input[type="checkbox"]:checked'); // Удобства
 
-    if (typeFilterValue !== 'any') {
-      filteredPins = filteredPins.filter(function (it) {
-        return it.offer.type === typeFilterValue;
-      });
-    }
-
     filteredPins = filteredPins.filter(function (it) {
-      return checkPrice(it.offer.price, priceFilterValue);
+      return getSelectValue(typeFilterValue, it.offer.type) &&
+        checkPrice(it.offer.price, priceFilterValue) &&
+        getSelectValue(roomNumberValue, it.offer.rooms) &&
+        getSelectValue(guestsNumberValue, it.offer.guests);
     });
-
-    if (roomNumberValue !== 'any') {
-      filteredPins = filteredPins.filter(function (it) {
-        return it.offer.rooms === parseInt(roomNumberValue, 10);
-      });
-    }
-    if (guestsNumberValue !== 'any') {
-      filteredPins = filteredPins.filter(function (it) {
-        return it.offer.guests === parseInt(guestsNumberValue, 10);
-      });
-    }
 
     if (selectedFeatures.length > 0) {
       [].forEach.call(selectedFeatures, function (item) {
