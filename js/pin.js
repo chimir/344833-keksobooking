@@ -16,7 +16,14 @@
     newPin.className = 'pin';
     newPin.style = 'left: ' + x + 'px; top: ' + y + 'px';
     newPin.tabIndex = 0;
-    newPin.innerHTML = '<img src="' + data.author.avatar + '" class="rounded" width="40" height="40">';
+
+    var newPinAvatar = document.createElement('img');
+    newPinAvatar.src = data.author.avatar;
+    newPinAvatar.className = 'rounded';
+    newPinAvatar.width = 40;
+    newPinAvatar.height = 40;
+
+    newPin.appendChild(newPinAvatar);
 
     return newPin;
   };
@@ -25,6 +32,7 @@
 
   var pins = [];
 
+  var filterResult;
   var updatePins = function () {
     var filteredPins = pins;
 
@@ -69,6 +77,7 @@
       });
     }
 
+    filterResult = filteredPins;
     render(filteredPins);
   };
 
@@ -104,9 +113,9 @@
     similarPin.innerHTML = '';
     similarPin.appendChild(pinMain);
 
-    for (var i = 0; i < data.length; i++) {
-      similarPin.appendChild(getPin(data[i]));
-    }
+    data.forEach(function (dataObject) {
+      similarPin.appendChild(getPin(dataObject));
+    });
   };
 
   var getInitialArray = function (data) {
@@ -145,20 +154,22 @@
 
     // Индекс нажатой метки.
     getPinIndex: function (evt) {
+      var pinsAll = document.querySelectorAll('.pin:not(.pin__main)');
       var target = evt.target;
 
       if (target.nodeName === 'IMG') {
-        var targetSrc = evt.target.getAttribute('src');
+        var targetElement = target.parentNode;
       } else {
-        targetSrc = evt.target.firstChild.getAttribute('src');
+        targetElement = target;
       }
 
       var i = 0;
-      while (pins[i].author.avatar !== targetSrc) {
+      while (pinsAll[i] !== targetElement) {
         i++;
       }
 
-      return pins[i]; // Объекст объявления с индексом нажатой метки.
+      var ads = typeof filterResult === 'undefined' ? getInitialArray(pins) : filterResult;
+      return ads[i]; // Объекст объявления с индексом нажатой метки.
     }
   };
 })();
