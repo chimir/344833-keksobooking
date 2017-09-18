@@ -147,6 +147,7 @@
       while (target !== similarPin) {
         if (target.className === 'pin') {
           highlightPin(target);
+          break;
         }
         target = target.parentNode;
       }
